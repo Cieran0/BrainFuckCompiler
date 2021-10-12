@@ -73,7 +73,8 @@ namespace BrainFuckCompiler
             header.Add("        mov     rsi,buf                 ");
             header.Add("        mov     rdx, 1                  ");
             header.Add("        syscall                         ");
-            header.Add("        mov     byte[mem+r9], byte [buf]");
+            header.Add("        mov     r10b, byte[buf]         ");
+            header.Add("        mov     byte[mem+r9], r10b      ");
             header.Add("        ret                             ");
             header.Add("                                        ");
             }
