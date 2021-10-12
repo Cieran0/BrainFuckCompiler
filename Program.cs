@@ -13,12 +13,25 @@ namespace BrainFuckCompiler
             {
                 if (File.Exists(args[0])) 
                 {
-                    string outputPath = args[0].Split('.')[0] + ".asm";
-                    Compiler.Compile(Condenser.Condense(Tokenise(File.ReadAllText(args[0]))), outputPath);
-                    Process.Start("nasm", $"-f elf64 {outputPath}");
-                    Process.Start("ld", $"-o {outputPath.Replace(".asm","")} {outputPath.Replace(".asm", ".o")}");
+                    string outputPath = args[0].Split('.')[0];
+                    string nasmPath = outputPath + ".asm";
+                    string ldPath = outputPath + ".o";
+                    Compiler.Compile(Condenser.Condense(Tokenise(File.ReadAllText(args[0]))), nasmPath);
+                    Process.Start("nasm", $"-f elf64 {nasmPath}");
+                    Process.Start("ld", $"-o {outputPath} {ldPath}");
+
+                    if (args.Length > 1)
+                    {
+                        if (args[1] == "-k")
+                        {
+                            System.Environment.Exit(0);
+                        }
+                    }
+                    File.Delete(nasmPath); File.Delete(ldPath);
                 }
+                
             }
+           
         }
 
         public enum TokenType 
