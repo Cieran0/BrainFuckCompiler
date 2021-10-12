@@ -9,16 +9,17 @@ namespace BrainFuckCompiler
  
         static void Main(string[] args)
         {
-            if (args.Length > 0) 
+            if (args.Length > 0)
             {
-                if (File.Exists(args[0])) 
+                if (File.Exists(args[0]))
                 {
                     string outputPath = args[0].Split('.')[0];
                     string nasmPath = outputPath + ".asm";
                     string ldPath = outputPath + ".o";
                     Compiler.Compile(Condenser.Condense(Tokenise(File.ReadAllText(args[0]))), nasmPath);
-                    Process pOne = Process.Start("nasm", $"-f elf64 {nasmPath}");
-                    Process pTwo = Process.Start("ld", $"-o {outputPath} {ldPath}");
+                    while (!Process.Start("nasm", $"-f elf64 {nasmPath}").HasExited) { }
+
+                    while (!Process.Start("ld", $"-o {outputPath} {ldPath}").HasExited) { }
 
                     if (args.Length > 1)
                     {
@@ -27,8 +28,9 @@ namespace BrainFuckCompiler
                             System.Environment.Exit(0);
                         }
                     }
-                    while (!pOne.HasExited || !pTwo.HasExited) { }
+                    
                     File.Delete(nasmPath); File.Delete(ldPath);
+                    }
                 }
                 
             }
