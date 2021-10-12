@@ -30,12 +30,11 @@ namespace BrainFuckCompiler
                     }
                     
                     File.Delete(nasmPath); File.Delete(ldPath);
-                    }
                 }
-                
             }
-           
+                
         }
+           
 
         public enum TokenType 
         { 
