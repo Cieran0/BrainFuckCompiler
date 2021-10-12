@@ -6,7 +6,7 @@ namespace BrainFuckCompiler
 {
     class Compiler
     {
-        public static void Compile(Token[] tokens, string outputPath) 
+        public static void Compile(List<Token> tokens, string outputPath) 
         {
             List<string> output = new List<string>();
             output.AddRange(GenHeader(tokens));
@@ -15,16 +15,16 @@ namespace BrainFuckCompiler
                 switch (t.type) 
                 {
                     case TokenType.INC:
-                        output.AddRange(INC());
+                        output.AddRange(INC(t.count));
                         break;
                     case TokenType.DEC:
-                        output.AddRange(DEC());
+                        output.AddRange(DEC(t.count));
                         break;
                     case TokenType.NEXT:
-                        output.AddRange(NEXT());
+                        output.AddRange(NEXT(t.count));
                         break;
                     case TokenType.PREV:
-                        output.AddRange(PREV());
+                        output.AddRange(PREV(t.count));
                         break;
                     case TokenType.READ:
                         output.AddRange(READ());
@@ -47,7 +47,7 @@ namespace BrainFuckCompiler
             File.WriteAllLines(outputPath, output);
         }
 
-        private static List<string> GenHeader(Token[] tokens) 
+        private static List<string> GenHeader(List<Token> tokens) 
         {
             List<string> header = new List<string>();
             bool hasRead  = false;
@@ -109,12 +109,12 @@ namespace BrainFuckCompiler
 
         private static List<string> READ() => new List<string>()  { "        call    read               " };
         private static List<string> WRITE() => new List<string>() { "        call    write              " };
-                                                                                                         
-        private static List<string> NEXT() => new List<string>()  { "        add     r9, 1              ", "        call    check              " };
-        private static List<string> PREV() => new List<string>()  { "        sub     r9, 1              ", "        call    check              " };
-
-        private static List<string> INC() => new List<string>()   { "        add     byte [mem + r9], 1 " };
-        private static List<string> DEC() => new List<string>()   { "        sub     byte [mem + r9], 1 " };
+                                                                                                        
+        private static List<string> NEXT(int count) => new List<string>()  { $"        add     r9, {count}              ", "        call    check              " };
+        private static List<string> PREV(int count) => new List<string>()  { $"        sub     r9, {count}              ", "        call    check              " };
+                                                                             
+        private static List<string> INC(int count) => new List<string>()   { $"        add     byte [mem + r9], {count} " };
+        private static List<string> DEC(int count) => new List<string>()   { $"        sub     byte [mem + r9], {count} " };
 
         private static List<string> LOOPSTART(int num) 
         {

@@ -5,7 +5,7 @@ namespace BrainFuckCompiler
 {
     class Tokeniser
     {
-        public static Token[] Tokenise(string input)
+        public static List<Token> Tokenise(string input)
         {
             Stack<int> countStack = new Stack<int>();
             List<Token> tokens = new List<Token>();
@@ -42,7 +42,7 @@ namespace BrainFuckCompiler
                         break;
                 }
             }
-            return tokens.ToArray();
+            return tokens;
 
         }
     }
