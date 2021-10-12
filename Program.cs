@@ -17,9 +17,10 @@ namespace BrainFuckCompiler
                     string nasmPath = outputPath + ".asm";
                     string ldPath = outputPath + ".o";
                     Compiler.Compile(Condenser.Condense(Tokenise(File.ReadAllText(args[0]))), nasmPath);
-                    while (!Process.Start("nasm", $"-f elf64 {nasmPath}").HasExited) { }
-
-                    while (!Process.Start("ld", $"-o {outputPath} {ldPath}").HasExited) { }
+                    Process process = Process.Start("nasm", $"-f elf64 {nasmPath}");
+                    while (!process.HasExited) { }
+                    process = Process.Start("ld", $"-o {outputPath} {ldPath}");
+                    while (!process.HasExited) { }
 
                     if (args.Length > 1)
                     {
