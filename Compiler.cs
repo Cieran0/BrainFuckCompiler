@@ -65,7 +65,7 @@ namespace BrainFuckCompiler
             header.Add("section .text                           ");
             header.Add("    global _start                       ");
             header.Add("                                        ");
-            if (hasRead || true)
+            if (hasRead)
             {
             header.Add("    read:                               ");
             header.Add("        xor     rax,rax                 ");
@@ -78,7 +78,7 @@ namespace BrainFuckCompiler
             header.Add("        ret                             ");
             header.Add("                                        ");
             }
-            if (hasWrite || true)
+            if (hasWrite)
             {
             header.Add("    write:                              ");
             header.Add("        mov     rax,1                   ");
